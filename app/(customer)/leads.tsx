@@ -1,4 +1,6 @@
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import { useAuthStore } from '@/store/authStore';
 import { useMyLeads } from '@/hooks/useLeads';
 import { Colors } from '@/constants/colors';
 import { Spacing, Typography, BorderRadius } from '@/constants/theme';
@@ -14,8 +16,28 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function CustomerLeadsScreen() {
+  const { isAuthenticated } = useAuthStore();
   const { data, isLoading, refetch } = useMyLeads();
   const leads: Lead[] = (data?.data as any) ?? [];
+
+  if (!isAuthenticated) {
+    return (
+      <View style={styles.guestRoot}>
+        <View style={styles.header}>
+          <Text style={styles.title}>My Leads</Text>
+          <Text style={styles.subtitle}>Businesses you've contacted</Text>
+        </View>
+        <View style={styles.guestContent}>
+          <Text style={styles.guestEmoji}>📋</Text>
+          <Text style={styles.guestTitle}>Sign in to view leads</Text>
+          <Text style={styles.guestText}>Keep track of all the service providers you contact in one place.</Text>
+          <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/(auth)/login')}>
+            <Text style={styles.primaryBtnText}>Sign In / Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -114,4 +136,14 @@ const styles = StyleSheet.create({
   emptyEmoji: { fontSize: 48, marginBottom: Spacing.md },
   emptyText: { fontSize: Typography.fontSize.lg, fontWeight: '600', color: Colors.textPrimary },
   emptySubtext: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, marginTop: Spacing.xs, textAlign: 'center' },
+  guestRoot: { flex: 1, backgroundColor: Colors.background },
+  guestContent: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
+  guestEmoji: { fontSize: 64, marginBottom: Spacing.md },
+  guestTitle: { fontSize: Typography.fontSize.lg, fontWeight: '700', color: Colors.textPrimary, marginBottom: Spacing.sm },
+  guestText: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, textAlign: 'center', marginBottom: Spacing.xl, lineHeight: 20 },
+  primaryBtn: {
+    backgroundColor: Colors.primary, borderRadius: BorderRadius.md,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.xl, alignItems: 'center', width: '100%',
+  },
+  primaryBtnText: { color: Colors.white, fontWeight: '700', fontSize: Typography.fontSize.md },
 });

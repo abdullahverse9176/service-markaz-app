@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { router } from 'expo-router';
 import { useAuthStore } from '@/store/authStore';
 import { Colors } from '@/constants/colors';
 import { Spacing, Typography, BorderRadius } from '@/constants/theme';
@@ -14,7 +15,24 @@ export default function CustomerProfileScreen() {
     ]);
   };
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <View style={styles.guestRoot}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Profile</Text>
+          <Text style={styles.subtitle}>Manage your account settings</Text>
+        </View>
+        <View style={styles.guestContent}>
+          <Text style={styles.guestEmoji}>👤</Text>
+          <Text style={styles.guestTitle}>Sign in to view profile</Text>
+          <Text style={styles.guestText}>Sign in to access your profile details, manage active leads, and customize your experience.</Text>
+          <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/(auth)/login')}>
+            <Text style={styles.primaryBtnText}>Sign In / Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.container}>
@@ -93,4 +111,20 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: Colors.danger,
   },
   signOutText: { color: Colors.danger, fontWeight: '700', fontSize: Typography.fontSize.md },
+  guestRoot: { flex: 1, backgroundColor: Colors.background },
+  header: {
+    backgroundColor: Colors.surface, paddingTop: 60, paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.base, borderBottomWidth: 1, borderBottomColor: Colors.border,
+  },
+  title: { fontSize: Typography.fontSize.xl, fontWeight: '700', color: Colors.textPrimary },
+  subtitle: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary },
+  guestContent: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
+  guestEmoji: { fontSize: 64, marginBottom: Spacing.md },
+  guestTitle: { fontSize: Typography.fontSize.lg, fontWeight: '700', color: Colors.textPrimary, marginBottom: Spacing.sm },
+  guestText: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, textAlign: 'center', marginBottom: Spacing.xl, lineHeight: 20 },
+  primaryBtn: {
+    backgroundColor: Colors.primary, borderRadius: BorderRadius.md,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.xl, alignItems: 'center', width: '100%',
+  },
+  primaryBtnText: { color: Colors.white, fontWeight: '700', fontSize: Typography.fontSize.md },
 });

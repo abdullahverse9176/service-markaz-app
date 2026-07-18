@@ -2,13 +2,15 @@
 
 export const Colors = {
   // Brand
-  primary: '#6366F1',       // Indigo
-  primaryDark: '#4F46E5',
-  primaryLight: '#818CF8',
-  primaryMuted: '#EEF2FF',
+  primary: '#00A76D',       // Logo Green
+  primaryDark: '#008554',
+  primaryLight: '#26C28B',
+  primaryMuted: '#E6F6F0',   // Light green background tint
 
-  secondary: '#10B981',     // Emerald — success/available
-  secondaryDark: '#059669',
+  secondary: '#002D62',     // Logo Navy Blue
+  secondaryDark: '#001E42',
+  secondaryLight: '#1A4D85',
+  secondaryMuted: '#EBF1F7', // Light navy background tint
 
   accent: '#F59E0B',        // Amber — warnings, stars
   accentDark: '#D97706',
@@ -17,22 +19,22 @@ export const Colors = {
   dangerDark: '#DC2626',
   dangerMuted: '#FEE2E2',
 
-  // Neutrals
-  background: '#0F172A',    // Slate 900 — main bg
-  surface: '#1E293B',       // Slate 800 — cards
-  surfaceHigh: '#334155',   // Slate 700 — elevated cards
-  border: '#334155',        // Slate 700
-  borderLight: '#475569',   // Slate 600
+  // Neutrals — CLEAN LIGHT THEME
+  background: '#F8FAFC',    // Slate 50 — clean background
+  surface: '#FFFFFF',       // White — cards
+  surfaceHigh: '#F1F5F9',   // Slate 100 — elevated surface
+  border: '#E2E8F0',        // Slate 200 — clean border
+  borderLight: '#F1F5F9',   // Slate 100
 
   // Text
-  textPrimary: '#F8FAFC',   // Slate 50
-  textSecondary: '#94A3B8', // Slate 400
-  textMuted: '#64748B',     // Slate 500
-  textInverse: '#0F172A',   // Dark on light bg
+  textPrimary: '#0F172A',   // Slate 900 — dark text
+  textSecondary: '#475569', // Slate 600 — medium text
+  textMuted: '#94A3B8',     // Slate 400 — muted text
+  textInverse: '#FFFFFF',   // Light on dark bg
 
   // Status colors
   statusPending: '#F59E0B',
-  statusConfirmed: '#10B981',
+  statusConfirmed: '#00A76D',
   statusRejected: '#EF4444',
   statusDisputed: '#8B5CF6',
 

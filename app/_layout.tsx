@@ -27,7 +27,7 @@ export default function RootLayout() {
     if (!isHydrated) return;
 
     if (!isAuthenticated) {
-      router.replace('/(auth)/login');
+      router.replace('/(customer)');
     } else if (user?.role === 'provider') {
       router.replace('/(provider)');
     } else {
