@@ -753,6 +753,7 @@ const styles = StyleSheet.create({
   },
   promoCard: {
     width: SCREEN_WIDTH - Spacing.base * 2,
+    height: 140,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     flexDirection: 'row',
