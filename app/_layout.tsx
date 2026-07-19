@@ -37,7 +37,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <StatusBar style="light" backgroundColor={Colors.background} />
+      <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(customer)" />
