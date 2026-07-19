@@ -125,7 +125,7 @@ export default function CustomerHomeScreen() {
         <View style={styles.welcomeRow}>
           <View>
             <Text style={styles.brandTitle}>
-              <Text style={styles.brandTextWhite}>Service</Text>
+              <Text style={styles.brandTextWhite}>Service </Text>
               <Text style={styles.brandTextGreen}>Markaz</Text>
             </Text>
             <View style={styles.locationContainer}>
@@ -357,9 +357,9 @@ export default function CustomerHomeScreen() {
             <View key={idx} style={styles.stepCol}>
               <View style={styles.stepIconOuter}>
                 <Ionicons name={step.icon} size={24} color={Colors.primary} />
-                <View style={styles.stepNumberBadge}>
+                {/* <View style={styles.stepNumberBadge}>
                   <Text style={styles.stepNumberText}>{step.step}</Text>
-                </View>
+                </View> */}
               </View>
               <Text style={styles.stepTitle}>{step.title}</Text>
               <Text style={styles.stepDesc}>{step.desc}</Text>
@@ -388,7 +388,7 @@ export default function CustomerHomeScreen() {
       </View>
 
       {/* 8. Collapsible FAQ Section */}
-      <View style={styles.faqWrap}>
+      {/* <View style={styles.faqWrap}>
         <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
         <Text style={[styles.sectionSubtitle, { marginBottom: Spacing.md }]}>Have questions? Find quick answers below</Text>
         {FAQS.map((faq, index) => {
@@ -415,7 +415,7 @@ export default function CustomerHomeScreen() {
             </View>
           );
         })}
-      </View>
+      </View> */}
 
       {/* 9. Dual CTA Banners */}
       <View style={styles.dualCTAWrap}>
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
-    paddingTop: 55,
+    paddingTop: 30,
     paddingHorizontal: Spacing.base,
     paddingBottom: 40,
     position: 'relative',
@@ -605,6 +605,7 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.lg,
     fontWeight: '900',
     letterSpacing: 0.5,
+    fontFamily: Typography.fontFamily.extraBold,
   },
   brandTextWhite: {
     color: Colors.white,
@@ -622,6 +623,7 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.xs,
     fontWeight: '600',
     marginLeft: 3,
+    fontFamily: Typography.fontFamily.semiBold,
   },
   avatarButton: {
     width: 38,
@@ -645,6 +647,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '700',
     fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontFamily.bold,
   },
   welcomeMainRow: {
     marginBottom: Spacing.lg,
@@ -654,12 +657,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.75)',
     marginBottom: 4,
+    fontFamily: Typography.fontFamily.medium,
   },
   heroTitle: {
     fontSize: Typography.fontSize.xl,
     fontWeight: '800',
     color: Colors.white,
     lineHeight: 28,
+    fontFamily: Typography.fontFamily.extraBold,
   },
   searchBox: {
     flexDirection: 'row',
@@ -682,6 +687,7 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: Typography.fontSize.sm,
     height: '100%',
+    fontFamily: Typography.fontFamily.regular,
   },
   clearSearchBtn: {
     padding: Spacing.xs,
@@ -722,12 +728,14 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.md,
     fontWeight: '800',
     color: Colors.secondary,
+    fontFamily: Typography.fontFamily.bold,
   },
   statLabel: {
     fontSize: Typography.fontSize.xs - 1,
     color: Colors.textSecondary,
     fontWeight: '500',
     marginTop: 2,
+    fontFamily: Typography.fontFamily.medium,
   },
   statDivider: {
     width: 1,
@@ -762,12 +770,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: Colors.white,
     marginBottom: 4,
+    fontFamily: Typography.fontFamily.bold,
   },
   promoDesc: {
     fontSize: Typography.fontSize.xs,
     color: 'rgba(255, 255, 255, 0.85)',
     marginBottom: Spacing.md,
     lineHeight: 16,
+    fontFamily: Typography.fontFamily.regular,
   },
   promoBtn: {
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
@@ -782,6 +792,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '700',
     fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontFamily.bold,
   },
   promoIconWrap: {
     position: 'absolute',
@@ -822,16 +833,19 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.md,
     fontWeight: '800',
     color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
   },
   sectionSubtitle: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     marginTop: 2,
+    fontFamily: Typography.fontFamily.regular,
   },
   seeAllLink: {
     fontSize: Typography.fontSize.xs,
     color: Colors.primary,
     fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
   },
 
   // Popular Services Grid Styles
@@ -868,10 +882,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.textSecondary,
     textAlign: 'center',
+    fontFamily: Typography.fontFamily.medium,
   },
   categoryGridLabelActive: {
     color: Colors.primary,
     fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
   },
 
   // Top Rated Section Styles
@@ -932,11 +948,13 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.xs + 1,
     fontWeight: '800',
     color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
   },
   trCategory: {
     fontSize: 10,
     color: Colors.textSecondary,
     marginTop: 1,
+    fontFamily: Typography.fontFamily.regular,
   },
   trRatingRow: {
     flexDirection: 'row',
@@ -948,10 +966,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
   },
   trReviewsCount: {
     fontSize: 10,
     color: Colors.textMuted,
+    fontFamily: Typography.fontFamily.regular,
   },
   trDivider: {
     height: 1,
@@ -967,6 +987,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     color: Colors.primary,
+    fontFamily: Typography.fontFamily.bold,
   },
   trStatusDot: {
     width: 6,
@@ -1017,6 +1038,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 10,
     fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
   },
   stepTitle: {
     fontSize: Typography.fontSize.xs + 1,
@@ -1024,12 +1046,14 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     marginBottom: 4,
     textAlign: 'center',
+    fontFamily: Typography.fontFamily.bold,
   },
   stepDesc: {
     fontSize: 9,
     color: Colors.textSecondary,
     textAlign: 'center',
     lineHeight: 12,
+    fontFamily: Typography.fontFamily.regular,
   },
 
   // Why Choose Us Styles
@@ -1066,11 +1090,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.textPrimary,
     marginBottom: 2,
+    fontFamily: Typography.fontFamily.bold,
   },
   whyCardDesc: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     lineHeight: 15,
+    fontFamily: Typography.fontFamily.regular,
   },
 
   // FAQ Section Styles
@@ -1101,9 +1127,11 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     flex: 1,
     marginRight: Spacing.sm,
+    fontFamily: Typography.fontFamily.bold,
   },
   faqQuestionActive: {
     color: Colors.primary,
+    fontFamily: Typography.fontFamily.bold,
   },
   faqAnswerContainer: {
     paddingHorizontal: Spacing.md,
@@ -1116,6 +1144,7 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     lineHeight: 16,
+    fontFamily: Typography.fontFamily.regular,
   },
 
   // Dual CTA Banners
@@ -1141,12 +1170,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: Colors.secondary,
     marginBottom: 4,
+    fontFamily: Typography.fontFamily.bold,
   },
   ctaDesc: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     marginBottom: Spacing.md,
     lineHeight: 16,
+    fontFamily: Typography.fontFamily.regular,
   },
   ctaBtn: {
     paddingVertical: 8,
@@ -1159,6 +1190,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '700',
     fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontFamily.bold,
   },
 
   // Specialist Grid/List card
@@ -1240,16 +1272,19 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     flex: 1,
     marginRight: Spacing.sm,
+    fontFamily: Typography.fontFamily.bold,
   },
   cardPrice: {
     fontSize: Typography.fontSize.xs + 1,
     fontWeight: '800',
     color: Colors.primary,
+    fontFamily: Typography.fontFamily.bold,
   },
   cardTitle: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     marginBottom: Spacing.sm,
+    fontFamily: Typography.fontFamily.regular,
   },
   cardDivider: {
     height: 1,
@@ -1274,6 +1309,7 @@ const styles = StyleSheet.create({
   metaLocation: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textMuted,
+    fontFamily: Typography.fontFamily.regular,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -1284,11 +1320,13 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontWeight: '700',
     marginLeft: 2,
+    fontFamily: Typography.fontFamily.bold,
   },
   reviewText: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textMuted,
     marginLeft: 2,
+    fontFamily: Typography.fontFamily.regular,
   },
   cardFooterRow: {
     flexDirection: 'row',
@@ -1304,11 +1342,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: BorderRadius.md,
+    fontFamily: Typography.fontFamily.bold,
   },
   experienceText: {
     fontSize: Typography.fontSize.xs,
     color: Colors.textSecondary,
     fontWeight: '600',
+    fontFamily: Typography.fontFamily.medium,
   },
   centered: {
     flex: 1,
@@ -1321,6 +1361,7 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginTop: Spacing.md,
     fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontFamily.regular,
   },
   empty: {
     alignItems: 'center',
@@ -1334,6 +1375,7 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: Typography.fontSize.sm,
     fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
   },
   emptySubtext: {
     color: Colors.textSecondary,
@@ -1341,5 +1383,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
     fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontFamily.regular,
   },
 });

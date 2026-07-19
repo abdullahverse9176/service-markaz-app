@@ -74,6 +74,7 @@ export default function CustomerLayout() {
       <Tabs.Screen
         name="leads"
         options={{
+          href: null,
           title: 'My Leads',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon 

@@ -60,7 +60,8 @@
           "color": "#6366F1",
           "sounds": []
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

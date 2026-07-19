@@ -4,9 +4,11 @@ import { Platform } from 'react-native';
 export const Typography = {
   // Font families
   fontFamily: {
-    regular: Platform.select({ ios: 'System', android: 'Roboto', default: 'System' }),
-    medium: Platform.select({ ios: 'System', android: 'Roboto-Medium', default: 'System' }),
-    bold: Platform.select({ ios: 'System', android: 'Roboto-Bold', default: 'System' }),
+    regular: 'Inter-Regular',
+    medium: 'Inter-Medium',
+    semiBold: 'Inter-SemiBold',
+    bold: 'Inter-Bold',
+    extraBold: 'Inter-ExtraBold',
   },
 
   // Font sizes
