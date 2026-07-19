@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   // Header Section Styles
   header: {
     backgroundColor: Colors.surface,
-    paddingTop: 55,
+    paddingTop: 15,
     paddingBottom: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,

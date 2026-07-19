@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
   },
   headerControls: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 55 : 45,
+    top: Platform.OS === 'ios' ? 55 :25,
     left: Spacing.base,
     right: Spacing.base,
     flexDirection: 'row',
