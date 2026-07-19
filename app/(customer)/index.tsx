@@ -1195,7 +1195,7 @@ const styles = StyleSheet.create({
 
   // Specialist Grid/List card
   listContent: {
-    paddingBottom: 40,
+    paddingBottom: 110,
     gap: Spacing.md,
   },
   card: {

@@ -1,19 +1,26 @@
 import { Tabs } from 'expo-router';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform, Text } from 'react-native';
 import { Colors } from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 
-interface TabBarIconProps {
+interface TabBarItemProps {
   name: keyof typeof Ionicons.glyphMap;
   focusedName: keyof typeof Ionicons.glyphMap;
-  color: any;
+  label: string;
   focused: boolean;
 }
 
-function TabBarIcon({ name, focusedName, color, focused }: TabBarIconProps) {
+function TabBarItem({ name, focusedName, label, focused }: TabBarItemProps) {
   return (
-    <View style={[styles.iconWrap, focused && styles.iconWrapActive]}>
-      <Ionicons name={focused ? focusedName : name} size={20} color={color} />
+    <View style={styles.tabItemContainer}>
+      <Ionicons 
+        name={focused ? focusedName : name} 
+        size={20} 
+        color={focused ? Colors.primary : Colors.textSecondary} 
+      />
+      <Text style={[styles.tabLabelText, { color: focused ? Colors.primary : Colors.textSecondary }]}>
+        {label}
+      </Text>
     </View>
   );
 }
@@ -21,23 +28,34 @@ function TabBarIcon({ name, focusedName, color, focused }: TabBarIconProps) {
 export default function CustomerLayout() {
   return (
     <Tabs
+      safeAreaInsets={{ bottom: 0, top: 0, left: 0, right: 0 }}
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.textMuted,
-        tabBarLabelStyle: styles.tabLabel,
+        tabBarShowLabel: false,
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        },
+        tabBarIconStyle: {
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 0,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon 
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem 
               name="home-outline" 
               focusedName="home" 
-              color={color} 
+              label="Home"
               focused={focused} 
             />
           ),
@@ -47,11 +65,11 @@ export default function CustomerLayout() {
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon 
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem 
               name="search-outline" 
               focusedName="search" 
-              color={color} 
+              label="Search"
               focused={focused} 
             />
           ),
@@ -61,11 +79,11 @@ export default function CustomerLayout() {
         name="nearby"
         options={{
           title: 'Near Me',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon 
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem 
               name="location-outline" 
               focusedName="location" 
-              color={color} 
+              label="Near Me"
               focused={focused} 
             />
           ),
@@ -76,11 +94,11 @@ export default function CustomerLayout() {
         options={{
           href: null,
           title: 'My Leads',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon 
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem 
               name="document-text-outline" 
               focusedName="document-text" 
-              color={color} 
+              label="My Leads"
               focused={focused} 
             />
           ),
@@ -90,11 +108,11 @@ export default function CustomerLayout() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon 
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem 
               name="person-outline" 
               focusedName="person" 
-              color={color} 
+              label="Profile"
               focused={focused} 
             />
           ),
@@ -106,26 +124,35 @@ export default function CustomerLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 24 : 16,
+    left: 20,
+    right: 20,
     backgroundColor: Colors.surface,
-    borderTopColor: Colors.border,
+    borderRadius: 20,
+    height: 68,
+    borderWidth: 1,
+    borderColor: 'rgba(226, 232, 240, 0.8)',
     borderTopWidth: 1,
-    height: 64,
-    paddingTop: 6,
-    paddingBottom: 8,
+    borderTopColor: 'rgba(226, 232, 240, 0.8)',
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  tabLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    marginTop: 2,
-  },
-  iconWrap: {
-    width: 40,
-    height: 28,
-    borderRadius: 14,
+  tabItemContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    minWidth: 70,
   },
-  iconWrapActive: {
-    backgroundColor: Colors.primaryMuted,
+  tabLabelText: {
+    fontSize: 10,
+    fontWeight: '700',
+    marginTop: 4,
+    fontFamily: 'Inter-Bold',
   },
 });
