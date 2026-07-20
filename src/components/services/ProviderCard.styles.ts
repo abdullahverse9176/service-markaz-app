@@ -1,0 +1,208 @@
+import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/colors';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/constants/theme';
+
+export const styles = StyleSheet.create({
+  providerCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.lg + 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginHorizontal: Spacing.base,
+    overflow: 'hidden',
+    ...Shadow.sm,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  imageContainer: {
+    position: 'relative',
+    width: 100,
+    height: 100,
+    borderRadius: BorderRadius.md,
+    overflow: 'hidden',
+  },
+  providerImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  providerPlaceholderImage: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.primaryMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholderChar: {
+    fontSize: Typography.fontSize['3xl'],
+    color: Colors.primary,
+    fontWeight: '800',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  openBadge: {
+    position: 'absolute',
+    bottom: Spacing.xs,
+    left: Spacing.xs,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  openBadgeText: {
+    color: Colors.white,
+    fontSize: 9,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
+  providerName: {
+    fontSize: Typography.fontSize.sm + 1,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    flex: 1,
+    marginRight: Spacing.xs,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  favBtn: {
+    padding: 2,
+  },
+  verifiedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+    gap: 2,
+  },
+  verifiedText: {
+    fontSize: 10,
+    color: '#10B981',
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+    gap: 2,
+  },
+  ratingVal: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  reviewsCount: {
+    fontSize: 11,
+    color: Colors.textMuted,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+    gap: 4,
+  },
+  metaText: {
+    fontSize: 11,
+    color: Colors.textSecondary,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  priceText: {
+    fontSize: Typography.fontSize.sm,
+    fontWeight: '800',
+    color: Colors.primary,
+    marginTop: 4,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  priceLabelText: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: Colors.textSecondary,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  cardDivider: {
+    height: 1,
+    backgroundColor: Colors.border,
+  },
+  cardFooter: {
+    padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  specColsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  specCol: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  specColDivider: {
+    width: 1,
+    height: 20,
+    backgroundColor: Colors.border,
+  },
+  specLabel: {
+    fontSize: 9,
+    color: Colors.textMuted,
+    marginBottom: 2,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  specValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  specValue: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  whatsappBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#10B981',
+    borderRadius: BorderRadius.md,
+    height: 38,
+    backgroundColor: Colors.surface,
+  },
+  whatsappBtnText: {
+    color: '#10B981',
+    fontSize: Typography.fontSize.xs + 1,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  callBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.primary,
+    borderRadius: BorderRadius.md,
+    height: 38,
+    ...Shadow.sm,
+  },
+  callBtnText: {
+    color: Colors.white,
+    fontSize: Typography.fontSize.xs + 1,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+});
