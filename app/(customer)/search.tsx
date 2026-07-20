@@ -20,6 +20,8 @@ const SEARCH_CATEGORIES = [
   { label: 'Cleaning', name: 'Cleaning', icon: 'sparkles-outline' as const, bg: '#DCFCE7', color: '#15803D' },
 ];
 
+const POPULAR_TAGS = ['AC Cleaning', 'UPS Install', 'Wiring Fix', 'Sofa Washing', 'Leakage Pipe'];
+
 const DUMMY_PROVIDERS: Business[] = [
   {
     _id: 'dummy-1',
@@ -173,6 +175,7 @@ export default function SearchScreen() {
     nearMe?: string;
     rating4Plus?: string;
     featured?: string;
+    priceRange?: string;
   }>();
   
   const [search, setSearch] = useState('');
@@ -184,10 +187,14 @@ export default function SearchScreen() {
   const [nearMe, setNearMe] = useState(false);
   const [rating4Plus, setRating4Plus] = useState(false);
   const [featured, setFeatured] = useState(false);
+  
+  // New States
+  const [recentSearches, setRecentSearches] = useState<string[]>(['AC Servicing', 'Plumber Visit']);
+  const [priceRange, setPriceRange] = useState<'All' | 'budget' | 'mid' | 'premium'>('All');
 
   const { lat, lng, requestLocation } = useLocation();
 
-  // Load search query & options from navigation params
+  // Load search options from parameters
   useEffect(() => {
     if (params.q !== undefined) {
       setSearch(params.q);
@@ -213,6 +220,9 @@ export default function SearchScreen() {
     }
     if (params.featured !== undefined) {
       setFeatured(params.featured === 'true');
+    }
+    if (params.priceRange !== undefined) {
+      setPriceRange(params.priceRange as any);
     }
   }, [params]);
 
@@ -252,6 +262,14 @@ export default function SearchScreen() {
     if (rating4Plus && b.rating < 4.5) return false;
     if (featured && !b.featured) return false;
 
+    // Price Budget filter
+    if (priceRange !== 'All') {
+      const fee = parseInt(b.pricing?.calloutFee || '0');
+      if (priceRange === 'budget' && fee > 400) return false;
+      if (priceRange === 'mid' && (fee <= 400 || fee > 800)) return false;
+      if (priceRange === 'premium' && fee <= 800) return false;
+    }
+
     return true;
   });
 
@@ -266,6 +284,17 @@ export default function SearchScreen() {
 
   const handleSearch = () => {
     setActiveSearch(search);
+    if (search.trim() && !recentSearches.includes(search.trim())) {
+      setRecentSearches(prev => [search.trim(), ...prev.slice(0, 3)]);
+    }
+  };
+
+  const triggerDirectTagSearch = (tag: string) => {
+    setSearch(tag);
+    setActiveSearch(tag);
+    if (!recentSearches.includes(tag)) {
+      setRecentSearches(prev => [tag, ...prev.slice(0, 3)]);
+    }
   };
 
   const cycleSort = () => {
@@ -290,7 +319,20 @@ export default function SearchScreen() {
             <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.topBarTitle}>Filter Specialists</Text>
-          <View style={{ width: 32 }} />
+          <TouchableOpacity onPress={() => {
+            setSearch('');
+            setActiveSearch('');
+            setSelectedCategory('All');
+            setSort('rating');
+            setVerified(false);
+            setAvailable(false);
+            setNearMe(false);
+            setRating4Plus(false);
+            setFeatured(false);
+            setPriceRange('All');
+          }}>
+            <Text style={styles.resetText}>Reset</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Search Input and Filter */}
@@ -313,7 +355,7 @@ export default function SearchScreen() {
             )}
           </View>
           <TouchableOpacity style={styles.filterBtn} onPress={handleSearch}>
-            <Ionicons name="options-outline" size={22} color={Colors.textPrimary} />
+            <Ionicons name="search" size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>
 
@@ -329,8 +371,49 @@ export default function SearchScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Recent Searches */}
+        {recentSearches.length > 0 && (
+          <View style={styles.recentWrap}>
+            <View style={styles.recentHeaderRow}>
+              <Text style={styles.sectionHeadingMini}>Recent Searches</Text>
+              <TouchableOpacity onPress={() => setRecentSearches([])}>
+                <Text style={styles.clearRecentLink}>Clear</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.recentTagsRow}>
+              {recentSearches.map((item, idx) => (
+                <TouchableOpacity 
+                  key={idx} 
+                  style={styles.recentTag} 
+                  onPress={() => triggerDirectTagSearch(item)}
+                >
+                  <Ionicons name="time-outline" size={12} color={Colors.textSecondary} style={{ marginRight: 4 }} />
+                  <Text style={styles.recentTagText}>{item}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Popular Tags */}
+        <View style={styles.popularWrap}>
+          <Text style={styles.sectionHeadingMini}>Popular Searches</Text>
+          <View style={styles.popularTagsRow}>
+            {POPULAR_TAGS.map((tag, idx) => (
+              <TouchableOpacity 
+                key={idx} 
+                style={styles.popularTag} 
+                onPress={() => triggerDirectTagSearch(tag)}
+              >
+                <Ionicons name="trending-up-outline" size={12} color={Colors.primary} style={{ marginRight: 4 }} />
+                <Text style={styles.popularTagText}>{tag}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Categories Section */}
         <Text style={styles.sectionHeading}>Categories</Text>
-        {/* Category Scroll Row */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScroll}>
           <TouchableOpacity 
             style={styles.categoryItem} 
@@ -369,85 +452,121 @@ export default function SearchScreen() {
           })}
         </ScrollView>
 
-        <Text style={styles.sectionHeading}>Quick Filters</Text>
-        {/* Filter Chips Scroll Row */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsScroll}>
-          {/* Near Me Chip */}
-          <TouchableOpacity 
-            style={[styles.chip, nearMe && styles.chipActive]} 
-            onPress={handleToggleNearMe}
-          >
-            <Ionicons 
-              name="navigate-outline" 
-              size={14} 
-              color={nearMe ? Colors.white : Colors.primary} 
-              style={styles.chipIcon} 
-            />
-            <Text style={[styles.chipText, nearMe && styles.chipTextActive]}>Near Me</Text>
-          </TouchableOpacity>
+        {/* Advanced Filters Card Wrap */}
+        <View style={styles.settingsCard}>
+          <Text style={styles.cardHeading}>Quick Criteria</Text>
+          
+          {/* Quick Filters Chips */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsScroll}>
+            <TouchableOpacity 
+              style={[styles.chip, nearMe && styles.chipActive]} 
+              onPress={handleToggleNearMe}
+            >
+              <Ionicons 
+                name="navigate-outline" 
+                size={14} 
+                color={nearMe ? Colors.white : Colors.primary} 
+                style={styles.chipIcon} 
+              />
+              <Text style={[styles.chipText, nearMe && styles.chipTextActive]}>Near Me</Text>
+            </TouchableOpacity>
 
-          {/* 4.5+ Star Chip */}
-          <TouchableOpacity 
-            style={[styles.chip, rating4Plus && styles.chipActive]} 
-            onPress={() => setRating4Plus(!rating4Plus)}
-          >
-            <Ionicons 
-              name="star" 
-              size={14} 
-              color={rating4Plus ? Colors.white : Colors.accent} 
-              style={styles.chipIcon} 
-            />
-            <Text style={[styles.chipText, rating4Plus && styles.chipTextActive]}>4.5+</Text>
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.chip, rating4Plus && styles.chipActive]} 
+              onPress={() => setRating4Plus(!rating4Plus)}
+            >
+              <Ionicons 
+                name="star" 
+                size={14} 
+                color={rating4Plus ? Colors.white : Colors.accent} 
+                style={styles.chipIcon} 
+              />
+              <Text style={[styles.chipText, rating4Plus && styles.chipTextActive]}>4.5+</Text>
+            </TouchableOpacity>
 
-          {/* Verified Chip */}
-          <TouchableOpacity 
-            style={[styles.chip, verified && styles.chipActive]} 
-            onPress={() => setVerified(!verified)}
-          >
-            <Ionicons 
-              name="checkmark-circle" 
-              size={14} 
-              color={verified ? Colors.white : '#10B981'} 
-              style={styles.chipIcon} 
-            />
-            <Text style={[styles.chipText, verified && styles.chipTextActive]}>Verified</Text>
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.chip, verified && styles.chipActive]} 
+              onPress={() => setVerified(!verified)}
+            >
+              <Ionicons 
+                name="checkmark-circle" 
+                size={14} 
+                color={verified ? Colors.white : '#10B981'} 
+                style={styles.chipIcon} 
+              />
+              <Text style={[styles.chipText, verified && styles.chipTextActive]}>Verified</Text>
+            </TouchableOpacity>
 
-          {/* Featured Chip */}
-          <TouchableOpacity 
-            style={[styles.chip, featured && styles.chipActive]} 
-            onPress={() => setFeatured(!featured)}
-          >
-            <Ionicons 
-              name="flame" 
-              size={14} 
-              color={featured ? Colors.white : '#EF4444'} 
-              style={styles.chipIcon} 
-            />
-            <Text style={[styles.chipText, featured && styles.chipTextActive]}>Featured</Text>
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.chip, featured && styles.chipActive]} 
+              onPress={() => setFeatured(!featured)}
+            >
+              <Ionicons 
+                name="flame" 
+                size={14} 
+                color={featured ? Colors.white : '#EF4444'} 
+                style={styles.chipIcon} 
+              />
+              <Text style={[styles.chipText, featured && styles.chipTextActive]}>Featured</Text>
+            </TouchableOpacity>
 
-          {/* Open Now Chip */}
-          <TouchableOpacity 
-            style={[styles.chip, available && styles.chipActive]} 
-            onPress={() => setAvailable(!available)}
-          >
-            <View style={[
-              styles.statusDotIcon, 
-              { backgroundColor: available ? Colors.white : '#10B981' }
-            ]} />
-            <Text style={[styles.chipText, available && styles.chipTextActive]}>Open Now</Text>
-          </TouchableOpacity>
-        </ScrollView>
+            <TouchableOpacity 
+              style={[styles.chip, available && styles.chipActive]} 
+              onPress={() => setAvailable(!available)}
+            >
+              <View style={[
+                styles.statusDotIcon, 
+                { backgroundColor: available ? Colors.white : '#10B981' }
+              ]} />
+              <Text style={[styles.chipText, available && styles.chipTextActive]}>Open Now</Text>
+            </TouchableOpacity>
+          </ScrollView>
 
-        <Text style={styles.sectionHeading}>Sort Result By</Text>
-        <View style={styles.sortContainer}>
+          <View style={styles.divider} />
+
+          {/* Sort Results */}
+          <Text style={styles.cardHeading}>Sort Order</Text>
           <TouchableOpacity style={styles.sortRowBtn} onPress={cycleSort}>
             <Ionicons name="funnel-outline" size={16} color={Colors.primary} style={{ marginRight: 6 }} />
-            <Text style={styles.sortText}>Sorting Active: <Text style={styles.sortValueText}>{getSortLabel()}</Text></Text>
+            <Text style={styles.sortLabel}>Active Sorting: <Text style={styles.sortValueText}>{getSortLabel()}</Text></Text>
             <Ionicons name="swap-vertical" size={16} color={Colors.textSecondary} style={{ marginLeft: 'auto' }} />
           </TouchableOpacity>
+        </View>
+
+        {/* Budget Filters Card */}
+        <View style={styles.settingsCard}>
+          <Text style={styles.cardHeading}>Specialist Visit Fee Budget</Text>
+          <Text style={styles.cardSubtext}>Filter experts based on home consultation check-up fees</Text>
+          
+          <View style={styles.budgetGrid}>
+            <TouchableOpacity 
+              style={[styles.budgetTab, priceRange === 'All' && styles.budgetTabActive]}
+              onPress={() => setPriceRange('All')}
+            >
+              <Text style={[styles.budgetTabText, priceRange === 'All' && styles.budgetTabTextActive]}>Any Price</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.budgetTab, priceRange === 'budget' && styles.budgetTabActive]}
+              onPress={() => setPriceRange('budget')}
+            >
+              <Text style={[styles.budgetTabText, priceRange === 'budget' && styles.budgetTabTextActive]}>≤ Rs.400</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.budgetTab, priceRange === 'mid' && styles.budgetTabActive]}
+              onPress={() => setPriceRange('mid')}
+            >
+              <Text style={[styles.budgetTabText, priceRange === 'mid' && styles.budgetTabTextActive]}>Rs.401 - 800</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.budgetTab, priceRange === 'premium' && styles.budgetTabActive]}
+              onPress={() => setPriceRange('premium')}
+            >
+              <Text style={[styles.budgetTabText, priceRange === 'premium' && styles.budgetTabTextActive]}>Rs.800+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
@@ -466,6 +585,7 @@ export default function SearchScreen() {
               nearMe: nearMe ? 'true' : 'false',
               rating4Plus: rating4Plus ? 'true' : 'false',
               featured: featured ? 'true' : 'false',
+              priceRange: priceRange,
             }
           })}
         >
@@ -505,6 +625,12 @@ const styles = StyleSheet.create({
   backBtn: {
     padding: Spacing.xs,
   },
+  resetText: {
+    fontSize: Typography.fontSize.xs + 1,
+    color: Colors.primary,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
   sectionHeading: {
     fontSize: Typography.fontSize.sm,
     fontWeight: '800',
@@ -513,6 +639,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     marginTop: Spacing.lg,
     marginBottom: Spacing.sm,
+  },
+  sectionHeadingMini: {
+    fontSize: Typography.fontSize.xs + 1,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
   },
 
   // Header Search Input Styles
@@ -533,6 +665,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     paddingHorizontal: Spacing.md,
     height: 48,
+    ...Shadow.sm,
   },
   searchIcon: {
     marginRight: Spacing.xs,
@@ -556,6 +689,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     alignItems: 'center',
     justifyContent: 'center',
+    ...Shadow.sm,
   },
 
   // Location Row Styles
@@ -564,7 +698,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   locationLeft: {
     flexDirection: 'row',
@@ -581,6 +715,70 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.xs,
     color: Colors.primary,
     fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+
+  // Recent Searches
+  recentWrap: {
+    paddingHorizontal: Spacing.base,
+    marginBottom: Spacing.md,
+  },
+  recentHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.xs,
+  },
+  clearRecentLink: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.textMuted,
+    fontWeight: '600',
+  },
+  recentTagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.xs,
+    marginTop: 4,
+  },
+  recentTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceHigh,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 5,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  recentTagText: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.textSecondary,
+    fontFamily: Typography.fontFamily.medium,
+  },
+
+  // Popular Searches
+  popularWrap: {
+    paddingHorizontal: Spacing.base,
+    marginBottom: Spacing.sm,
+  },
+  popularTagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.xs,
+    marginTop: Spacing.xs,
+  },
+  popularTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.primaryMuted,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 5,
+    borderRadius: BorderRadius.md,
+  },
+  popularTagText: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.primary,
+    fontWeight: '600',
     fontFamily: Typography.fontFamily.bold,
   },
 
@@ -619,15 +817,44 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.bold,
   },
 
+  // Settings Card (Filters and Sort order container)
+  settingsCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginHorizontal: Spacing.base,
+    marginTop: Spacing.lg,
+    padding: Spacing.md,
+    ...Shadow.sm,
+  },
+  cardHeading: {
+    fontSize: Typography.fontSize.xs + 2,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+    marginBottom: Spacing.sm,
+  },
+  cardSubtext: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.md,
+    lineHeight: 14,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.border,
+    marginVertical: Spacing.md,
+  },
+
   // Chips Scroll Styles
   chipsScroll: {
-    paddingHorizontal: Spacing.base,
     gap: Spacing.xs,
   },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: BorderRadius.full,
@@ -658,27 +885,57 @@ const styles = StyleSheet.create({
   },
 
   // Sort Styles
-  sortContainer: {
-    paddingHorizontal: Spacing.base,
-  },
   sortRowBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: BorderRadius.lg,
     paddingHorizontal: Spacing.md,
-    height: 48,
+    height: 44,
   },
-  sortText: {
-    fontSize: Typography.fontSize.xs + 1,
+  sortLabel: {
+    fontSize: Typography.fontSize.xs,
     color: Colors.textPrimary,
     fontWeight: '600',
     fontFamily: Typography.fontFamily.bold,
   },
   sortValueText: {
     color: Colors.primary,
+  },
+
+  // Budget grid selectors
+  budgetGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+  },
+  budgetTab: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: Colors.background,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: BorderRadius.md,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  budgetTabActive: {
+    backgroundColor: Colors.primaryMuted,
+    borderColor: Colors.primary,
+  },
+  budgetTabText: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+    fontFamily: Typography.fontFamily.medium,
+  },
+  budgetTabTextActive: {
+    color: Colors.primary,
+    fontWeight: '800',
+    fontFamily: Typography.fontFamily.bold,
   },
 
   // Sticky bottom footer CTA

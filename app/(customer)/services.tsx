@@ -165,6 +165,7 @@ export default function ServicesScreen() {
     nearMe?: string;
     rating4Plus?: string;
     featured?: string;
+    priceRange?: string;
   }>();
 
   const activeSearch = params.q || '';
@@ -175,6 +176,7 @@ export default function ServicesScreen() {
   const nearMe = params.nearMe === 'true';
   const rating4Plus = params.rating4Plus === 'true';
   const featured = params.featured === 'true';
+  const priceRange = params.priceRange || 'All';
 
   const [favorites, setFavorites] = useState<string[]>([]);
   const { lat, lng, requestLocation } = useLocation();
@@ -230,6 +232,14 @@ export default function ServicesScreen() {
 
     // Featured filter
     if (featured && !b.featured) return false;
+
+    // Price range budget filter
+    if (priceRange !== 'All') {
+      const fee = parseInt(b.pricing?.calloutFee || '0');
+      if (priceRange === 'budget' && fee > 400) return false;
+      if (priceRange === 'mid' && (fee <= 400 || fee > 800)) return false;
+      if (priceRange === 'premium' && fee <= 800) return false;
+    }
 
     return true;
   });
@@ -415,6 +425,7 @@ export default function ServicesScreen() {
                 nearMe: nearMe ? 'true' : 'false',
                 rating4Plus: rating4Plus ? 'true' : 'false',
                 featured: featured ? 'true' : 'false',
+                priceRange: priceRange,
               }
             })}
           >
