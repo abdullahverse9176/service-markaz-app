@@ -29,7 +29,7 @@ export default function PopularCategories({
   return (
     <View>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Popular Services</Text>
+        <Text style={styles.sectionTitle}>Popular Categories</Text>
         <Text style={styles.sectionSubtitle}>Find high quality experts for all your home needs</Text>
       </View>
       <ScrollView
