@@ -24,7 +24,7 @@ export default function TopRatedSpecialists({
           <Text style={styles.sectionTitle}>Top Rated Specialists</Text>
           <Text style={styles.sectionSubtitle}>Verified professionals with excellent feedback</Text>
         </View>
-        <TouchableOpacity onPress={() => router.push('/(customer)/search')}>
+        <TouchableOpacity onPress={() => router.push('/(customer)/services')}>
           <Text style={styles.seeAllLink}>See All</Text>
         </TouchableOpacity>
       </View>

@@ -55,7 +55,7 @@ export default function PromoSlider() {
               <Text style={styles.promoDesc}>{slide.desc}</Text>
               <TouchableOpacity 
                 style={styles.promoBtn} 
-                onPress={() => router.push(index === 2 ? '/(customer)/profile' : '/(customer)/search')}
+                onPress={() => router.push(index === 2 ? '/(customer)/profile' : '/(customer)/services')}
               >
                 <Text style={styles.promoBtnText}>{slide.btnText}</Text>
               </TouchableOpacity>

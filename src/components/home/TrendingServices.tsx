@@ -72,7 +72,7 @@ export default function TrendingServices() {
           <Text style={styles.sectionTitle}>Trending Services</Text>
           <Text style={styles.sectionSubtitle}>Book popular services with exclusive discount rates</Text>
         </View>
-        <TouchableOpacity onPress={() => router.push('/(customer)/search')}>
+        <TouchableOpacity onPress={() => router.push('/(customer)/services')}>
           <Text style={styles.seeAllLink}>See All</Text>
         </TouchableOpacity>
       </View>
@@ -92,7 +92,7 @@ export default function TrendingServices() {
             style={styles.trendingCard}
             onPress={() => {
               router.push({
-                pathname: '/(customer)/search',
+                pathname: '/(customer)/services',
                 params: { category: item.category }
               });
             }}

@@ -23,7 +23,7 @@ export default function FeaturedProviders({ displayFeatured }: FeaturedProviders
           </View>
           <Text style={styles.featuredSectionTitle}>Top Rated Specialists</Text>
         </View>
-        <TouchableOpacity onPress={() => router.push('/(customer)/search')}>
+        <TouchableOpacity onPress={() => router.push('/(customer)/services')}>
           <Text style={styles.featuredSeeAll}>See All</Text>
         </TouchableOpacity>
       </View>

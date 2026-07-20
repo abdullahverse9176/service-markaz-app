@@ -76,6 +76,13 @@ export default function CustomerLayout() {
         }}
       />
       <Tabs.Screen
+        name="services"
+        options={{
+          href: null,
+          title: 'Services',
+        }}
+      />
+      <Tabs.Screen
         name="nearby"
         options={{
           title: 'Near Me',

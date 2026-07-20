@@ -56,7 +56,7 @@ export default function CustomerHomeScreen() {
     setActiveSearch(search);
     if (search.trim()) {
       router.push({
-        pathname: '/(customer)/search',
+        pathname: '/(customer)/services',
         params: { q: search }
       });
     }

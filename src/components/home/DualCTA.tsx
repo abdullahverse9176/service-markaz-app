@@ -14,7 +14,7 @@ export default function DualCTA() {
         <Text style={styles.ctaDesc}>Get high-quality service providers for your home instantly.</Text>
         <TouchableOpacity 
           style={[styles.ctaBtn, { backgroundColor: Colors.primary }]}
-          onPress={() => router.push('/(customer)/search')}
+          onPress={() => router.push('/(customer)/services')}
           activeOpacity={0.8}
         >
           <Text style={styles.ctaBtnText}>Find Specialist</Text>
