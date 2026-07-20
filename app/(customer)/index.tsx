@@ -19,6 +19,8 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const FEATURED_CARD_WIDTH = SCREEN_WIDTH - 64;
+const FEATURED_GAP = 12;
 
 // 8 Popular categories with custom icon backgrounds and theme colors
 const POPULAR_CATEGORIES = [
@@ -77,6 +79,123 @@ const FAQS = [
   { q: 'Can I register as a service provider?', a: 'Absolutely! If you offer any services, you can register as a provider by clicking "Want to Offer Services" below or changing your role in your Profile settings.' },
 ];
 
+const MOCK_FEATURED_PROVIDERS: Business[] = [
+  {
+    _id: 'mock-1',
+    owner: 'mock-owner-1',
+    email: 'rizwan@example.com',
+    phone: '+923001234561',
+    whatsapp: '+923001234561',
+    name: 'Muhammad Rizwan',
+    title: 'AC Repair & Installation Specialist',
+    category: 'AC Repair',
+    city: 'Islamabad',
+    area: 'G-11',
+    about: 'Professional AC technician with 8+ years of experience in repairing, installing, and servicing all types of air conditioners.',
+    services: ['AC Repair', 'AC Installation', 'Gas Charging'],
+    experience: 8,
+    completedProjects: 240,
+    specializations: ['Inverter AC', 'Split AC'],
+    serviceAreas: ['Islamabad', 'Rawalpindi'],
+    pricing: {
+      calloutFee: '500',
+      hourlyRate: '1000',
+      minCharge: '800'
+    },
+    availability: 'Available',
+    responseTime: '15 mins',
+    socialLinks: { facebook: '', instagram: '', youtube: '', website: '', linkedin: '', tiktok: '' },
+    profileImage: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=150',
+    bannerImage: '',
+    status: 'active',
+    rating: 4.9,
+    reviewsCount: 38,
+    verification: true,
+    featured: true,
+    viewCount: 120,
+    weeklyViews: 15,
+    monthlyViews: 65,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    _id: 'mock-2',
+    owner: 'mock-owner-2',
+    email: 'yasir@example.com',
+    phone: '+923001234562',
+    whatsapp: '+923001234562',
+    name: 'Yasir Khan',
+    title: 'Professional Electrician & Wiring Expert',
+    category: 'Electrician',
+    city: 'Islamabad',
+    area: 'F-8',
+    about: 'Expert electrician specializing in home wiring, short circuit repairs, UPS installation, and appliance maintenance.',
+    services: ['Home Wiring', 'UPS Repair', 'Breaker Fixing'],
+    experience: 5,
+    completedProjects: 150,
+    specializations: ['Home Automation', 'Industrial Wiring'],
+    serviceAreas: ['Islamabad'],
+    pricing: {
+      calloutFee: '0',
+      hourlyRate: '800',
+      minCharge: '500'
+    },
+    availability: 'Available',
+    responseTime: '30 mins',
+    socialLinks: { facebook: '', instagram: '', youtube: '', website: '', linkedin: '', tiktok: '' },
+    profileImage: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150',
+    bannerImage: '',
+    status: 'active',
+    rating: 4.8,
+    reviewsCount: 26,
+    verification: true,
+    featured: true,
+    viewCount: 95,
+    weeklyViews: 10,
+    monthlyViews: 40,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    _id: 'mock-3',
+    owner: 'mock-owner-3',
+    email: 'sajid@example.com',
+    phone: '+923001234563',
+    whatsapp: '+923001234563',
+    name: 'Sajid Mehmood',
+    title: 'Master Plumber & Leakage Fixer',
+    category: 'Plumber',
+    city: 'Islamabad',
+    area: 'I-9',
+    about: '20+ years of plumbing experience. Leakage detection, pipe fittings, geyser installation, and bathroom renovations.',
+    services: ['Leakage Repair', 'Geyser Install', 'Drain Unclogging'],
+    experience: 12,
+    completedProjects: 450,
+    specializations: ['Leakage Detection', 'Modern Bathroom Fit-outs'],
+    serviceAreas: ['Islamabad', 'Rawalpindi'],
+    pricing: {
+      calloutFee: '400',
+      hourlyRate: '1200',
+      minCharge: '700'
+    },
+    availability: 'Available',
+    responseTime: '20 mins',
+    socialLinks: { facebook: '', instagram: '', youtube: '', website: '', linkedin: '', tiktok: '' },
+    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    bannerImage: '',
+    status: 'active',
+    rating: 4.7,
+    reviewsCount: 54,
+    verification: true,
+    featured: true,
+    viewCount: 180,
+    weeklyViews: 25,
+    monthlyViews: 90,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
+
 export default function CustomerHomeScreen() {
   const [search, setSearch] = useState('');
   const [activeSearch, setActiveSearch] = useState('');
@@ -97,6 +216,18 @@ export default function CustomerHomeScreen() {
 
   // Filter top-rated providers for horizontal slider
   const topRatedProviders = businesses.filter(b => b.rating >= 4.0).slice(0, 6);
+
+  // Filter featured providers for the horizontal slider (fallback to high rated, top rated, any, or mock featured if none exist)
+  const featuredProviders = businesses.filter(b => b.featured === true);
+  const displayFeatured = featuredProviders.length > 0 
+    ? featuredProviders.slice(0, 6) 
+    : businesses.filter(b => b.rating >= 4.2).length > 0
+      ? businesses.filter(b => b.rating >= 4.2).slice(0, 6)
+      : topRatedProviders.length > 0
+        ? topRatedProviders.slice(0, 6)
+        : businesses.length > 0
+          ? businesses.slice(0, 6)
+          : MOCK_FEATURED_PROVIDERS;
 
   const handleSearch = () => {
     setActiveSearch(search);
@@ -206,6 +337,113 @@ export default function CustomerHomeScreen() {
           <Text style={styles.statLabel}>Avg Rating</Text>
         </View>
       </View>
+
+      {/* Featured Providers Slider */}
+      {displayFeatured.length > 0 && (
+        <View style={styles.featuredContainer}>
+          <View style={styles.featuredHeaderRow}>
+            <View style={styles.featuredTitleWrap}>
+              <View style={styles.featuredTitleBadge}>
+                <Ionicons name="sparkles" size={11} color={Colors.accentDark} />
+                <Text style={styles.featuredBadgeText}>FEATURED EXPERTS</Text>
+              </View>
+              <Text style={styles.featuredSectionTitle}>Top Rated Specialists</Text>
+            </View>
+            <TouchableOpacity onPress={() => router.push('/(customer)/search')}>
+              <Text style={styles.featuredSeeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate="fast"
+            snapToInterval={FEATURED_CARD_WIDTH + FEATURED_GAP}
+            snapToAlignment="start"
+            contentContainerStyle={styles.featuredScroll}
+            scrollEventThrottle={16}
+          >
+            {displayFeatured.map((item) => (
+              <TouchableOpacity
+                key={item._id}
+                style={styles.featuredCard}
+                onPress={() => router.push({ pathname: '/business/[id]', params: { id: item._id } })}
+                activeOpacity={0.95}
+              >
+                {/* Left Side: Info */}
+                <View style={styles.featCardLeft}>
+                  {/* Category & Verified Badge */}
+                  <View style={styles.featCategoryRow}>
+                    <Text style={styles.featCategoryText} numberOfLines={1}>{item.category}</Text>
+                    {item.verification && (
+                      <Ionicons name="checkmark-circle" size={13} color={Colors.primary} style={{ marginLeft: 4 }} />
+                    )}
+                  </View>
+
+                  {/* Provider Name */}
+                  <Text style={styles.featNameText} numberOfLines={1}>{item.name}</Text>
+                  
+                  {/* Title / Bio */}
+                  <Text style={styles.featTitleText} numberOfLines={2}>{item.title || item.about}</Text>
+
+                  {/* Rating / Experience Row */}
+                  <View style={styles.featRatingRow}>
+                    <View style={styles.featStarsContainer}>
+                      <Ionicons name="star" size={12} color={Colors.accent} />
+                      <Text style={styles.featRatingVal}>{formatRating(item.rating)}</Text>
+                      <Text style={styles.featReviewsCount}>({item.reviewsCount})</Text>
+                    </View>
+                    {item.experience > 0 && (
+                      <Text style={styles.featExpText}>{item.experience} yrs exp</Text>
+                    )}
+                  </View>
+
+                  <View style={styles.featFooterDivider} />
+
+                  {/* Cost & Booking CTA */}
+                  <View style={styles.featFooterRow}>
+                    <View>
+                      <Text style={styles.featPriceLabel}>Callout Fee</Text>
+                      <Text style={styles.featPriceVal}>
+                        {item.pricing?.calloutFee && item.pricing.calloutFee !== '0'
+                          ? `Rs. ${item.pricing.calloutFee}`
+                          : 'Free Visit'}
+                      </Text>
+                    </View>
+                    
+                    <View style={styles.featBookBtn}>
+                      <Text style={styles.featBookBtnText}>Book</Text>
+                      <Ionicons name="arrow-forward-sharp" size={10} color={Colors.white} style={{ marginLeft: 2 }} />
+                    </View>
+                  </View>
+                </View>
+
+                {/* Right Side: Profile Image */}
+                <View style={styles.featCardRight}>
+                  {item.profileImage ? (
+                    <Image source={{ uri: item.profileImage }} style={styles.featImage} />
+                  ) : (
+                    <View style={styles.featPlaceholder}>
+                      <Text style={styles.featPlaceholderText}>
+                        {item.name.charAt(0).toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
+                  {/* Absolute Badge for availability status */}
+                  <View style={[
+                    styles.featStatusBadge,
+                    { backgroundColor: item.availability === 'Available' ? Colors.primary : Colors.danger }
+                  ]}>
+                    <Text style={styles.featStatusText}>
+                      {item.availability === 'Available' ? 'Online' : 'Offline'}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
 
       {/* 3. Promo Slider (Paging Banners) */}
       <View style={styles.promoContainer}>
@@ -446,114 +684,34 @@ export default function CustomerHomeScreen() {
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* Section Header for Vertical Results list */}
-      <View style={[styles.sectionHeader, { marginTop: Spacing.xl, marginBottom: Spacing.xs }]}>
-        <Text style={styles.sectionTitle}>
-          {selectedCategory === 'All' ? 'All Specialists near you' : `${selectedCategory} specialists near you`}
-        </Text>
-        <Text style={styles.sectionSubtitle}>Select a specialist below to view details and check availability</Text>
-      </View>
     </View>
-  );
-
-  const renderItem = ({ item }: { item: Business }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => router.push({ pathname: '/business/[id]', params: { id: item._id } })}
-      activeOpacity={0.9}
-    >
-      {/* Banner / Profile image */}
-      <View style={styles.cardImageWrap}>
-        {item.profileImage ? (
-          <Image source={{ uri: item.profileImage }} style={styles.cardImage} />
-        ) : (
-          <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
-            <Text style={styles.placeholderText}>
-              {item.name.charAt(0).toUpperCase()}
-            </Text>
-          </View>
-        )}
-        
-        {/* Availability Badge */}
-        <View style={[
-          styles.badge,
-          { backgroundColor: item.availability === 'Available' ? Colors.primaryMuted : Colors.dangerMuted }
-        ]}>
-          <View style={[
-            styles.statusDot, 
-            { backgroundColor: item.availability === 'Available' ? Colors.primary : Colors.danger }
-          ]} />
-          <Text style={[
-            styles.badgeText,
-            { color: item.availability === 'Available' ? Colors.primary : Colors.danger }
-          ]}>
-            {item.availability}
-          </Text>
-        </View>
-
-        {/* Verification Checkmark */}
-        {item.verification && (
-          <View style={styles.verifiedIconWrap}>
-            <Ionicons name="checkmark-sharp" size={12} color={Colors.white} />
-          </View>
-        )}
-      </View>
-
-      {/* Body Details */}
-      <View style={styles.cardBody}>
-        <View style={styles.cardHeaderRow}>
-          <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
-          <Text style={styles.cardPrice}>
-            {item.pricing?.calloutFee && item.pricing.calloutFee !== '0' 
-              ? `Rs. ${item.pricing.calloutFee}` 
-              : 'Free Visit'}
-          </Text>
-        </View>
-        
-        <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
-
-        <View style={styles.cardDivider} />
-
-        <View style={styles.cardMeta}>
-          <View style={styles.locationWrap}>
-            <Ionicons name="location-outline" size={13} color={Colors.textMuted} style={styles.metaIcon} />
-            <Text style={styles.metaLocation} numberOfLines={1}>{item.area}, {item.city}</Text>
-          </View>
-          
-          <View style={styles.ratingRow}>
-            <Ionicons name="star" size={13} color={Colors.accent} style={styles.metaIcon} />
-            <Text style={styles.starText}>{formatRating(item.rating)}</Text>
-            <Text style={styles.reviewText}>({item.reviewsCount})</Text>
-          </View>
-        </View>
-
-        <View style={styles.cardFooterRow}>
-          <Text style={styles.cardCategory}>{item.category}</Text>
-          {item.experience > 0 && (
-            <Text style={styles.experienceText}>{item.experience} Years Exp.</Text>
-          )}
-        </View>
-      </View>
-    </TouchableOpacity>
   );
 
   return (
     <View style={styles.root}>
-      {isLoading ? (
+      {isLoading && businesses.length === 0 ? (
         <View style={styles.loadingContainer}>
-          {renderHeader()}
-          <View style={styles.centered}>
-            <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Loading experts...</Text>
-          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetching}
+                onRefresh={refetch}
+                tintColor={Colors.primary}
+                colors={[Colors.primary]}
+                progressBackgroundColor={Colors.surface}
+              />
+            }
+          >
+            {renderHeader()}
+            <View style={styles.centered}>
+              <ActivityIndicator size="large" color={Colors.primary} />
+              <Text style={styles.loadingText}>Loading experts...</Text>
+            </View>
+          </ScrollView>
         </View>
       ) : (
-        <FlatList
-          data={businesses}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          ListHeaderComponent={renderHeader()}
+        <ScrollView
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -565,14 +723,9 @@ export default function CustomerHomeScreen() {
               progressBackgroundColor={Colors.surface}
             />
           }
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              <Ionicons name="search-outline" size={40} color={Colors.textMuted} style={styles.emptyIcon} />
-              <Text style={styles.emptyText}>No specialists found</Text>
-              <Text style={styles.emptySubtext}>Try selecting another category or modify your search filters.</Text>
-            </View>
-          }
-        />
+        >
+          {renderHeader()}
+        </ScrollView>
       )}
     </View>
   );
@@ -1385,5 +1538,201 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontSize: Typography.fontSize.xs,
     fontFamily: Typography.fontFamily.regular,
+  },
+  // Featured section styles
+  featuredContainer: {
+    marginBottom: Spacing.xl,
+  },
+  featuredHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.base,
+    marginBottom: Spacing.sm,
+  },
+  featuredTitleWrap: {
+    gap: 3,
+  },
+  featuredTitleBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: Spacing.xs + 2,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    alignSelf: 'flex-start',
+    gap: 4,
+  },
+  featuredBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: Colors.accentDark,
+    letterSpacing: 0.5,
+    fontFamily: Typography.fontFamily.extraBold,
+  },
+  featuredSectionTitle: {
+    fontSize: Typography.fontSize.md,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  featuredSeeAll: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.primary,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  featuredScroll: {
+    paddingLeft: Spacing.base,
+    paddingRight: Spacing.base,
+  },
+  featuredCard: {
+    width: FEATURED_CARD_WIDTH,
+    height: 170,
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.lg,
+    marginRight: FEATURED_GAP,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: '#FEF3C7', // soft golden border
+    ...Shadow.md,
+  },
+  featCardLeft: {
+    flex: 1.3,
+    padding: Spacing.md,
+    justifyContent: 'space-between',
+  },
+  featCategoryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  featCategoryText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    fontFamily: Typography.fontFamily.bold,
+    backgroundColor: Colors.primaryMuted,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  featNameText: {
+    fontSize: Typography.fontSize.sm + 1,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+    marginTop: 4,
+  },
+  featTitleText: {
+    fontSize: Typography.fontSize.xs - 1,
+    color: Colors.textSecondary,
+    fontFamily: Typography.fontFamily.regular,
+    marginTop: 2,
+    lineHeight: 14,
+  },
+  featRatingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  featStarsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  featRatingVal: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  featReviewsCount: {
+    fontSize: 10,
+    color: Colors.textMuted,
+  },
+  featExpText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: Colors.textSecondary,
+    fontFamily: Typography.fontFamily.medium,
+  },
+  featFooterDivider: {
+    height: 1,
+    backgroundColor: Colors.border,
+    marginVertical: 4,
+  },
+  featFooterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  featPriceLabel: {
+    fontSize: 9,
+    color: Colors.textMuted,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  featPriceVal: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.primary,
+    fontFamily: Typography.fontFamily.bold,
+  },
+  featBookBtn: {
+    backgroundColor: Colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: Spacing.sm + 2,
+    borderRadius: BorderRadius.sm,
+    gap: 2,
+  },
+  featBookBtnText: {
+    color: Colors.white,
+    fontSize: 10,
+    fontWeight: '700',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  featCardRight: {
+    flex: 1,
+    position: 'relative',
+    height: '100%',
+    backgroundColor: Colors.surfaceHigh,
+  },
+  featImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  featPlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.secondaryMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  featPlaceholderText: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.secondary,
+  },
+  featStatusBadge: {
+    position: 'absolute',
+    top: Spacing.xs + 2,
+    right: Spacing.xs + 2,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: BorderRadius.sm,
+    opacity: 0.9,
+  },
+  featStatusText: {
+    fontSize: 9,
+    color: Colors.white,
+    fontWeight: '800',
+    fontFamily: Typography.fontFamily.bold,
   },
 });
