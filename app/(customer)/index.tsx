@@ -12,6 +12,7 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/constants/theme';
 import { formatRating, getInitials } from '@/utils/format';
 import type { Business } from '@/types/business';
 import { Ionicons } from '@expo/vector-icons';
+import TrendingServices from '@/components/TrendingServices';
 
 // Enable layout animations for Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -522,6 +523,8 @@ export default function CustomerHomeScreen() {
           );
         })}
       </ScrollView>
+
+      <TrendingServices />
 
       {/* 5. Top Rated Specialists Horizontal Slider */}
       {topRatedProviders.length > 0 && (
