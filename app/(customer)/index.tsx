@@ -495,7 +495,11 @@ export default function CustomerHomeScreen() {
         <Text style={styles.sectionTitle}>Popular Services</Text>
         <Text style={styles.sectionSubtitle}>Find high quality experts for all your home needs</Text>
       </View>
-      <View style={styles.categoriesGrid}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoriesScroll}
+      >
         {POPULAR_CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat.name;
           return (
@@ -517,7 +521,7 @@ export default function CustomerHomeScreen() {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
 
       {/* 5. Top Rated Specialists Horizontal Slider */}
       {topRatedProviders.length > 0 && (
@@ -1002,18 +1006,15 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.bold,
   },
 
-  // Popular Services Grid Styles
-  categoriesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: Spacing.base - 4,
-    justifyContent: 'space-between',
+  // Popular Services Scroll Styles
+  categoriesScroll: {
+    paddingHorizontal: Spacing.base,
     marginBottom: Spacing.xl,
+    gap: 12,
   },
   categoryGridItem: {
-    width: '22%',
+    width: 76,
     alignItems: 'center',
-    marginBottom: Spacing.base,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
   },
